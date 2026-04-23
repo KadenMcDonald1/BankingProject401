@@ -58,10 +58,10 @@ public class Customer extends User{
 			accounts[numAccounts] = new CheckingsAccount();
 		}
 		else if (type == accountType.SAVINGS) {
-			accounts[numAccounts] = new CheckingsAccount();
+			accounts[numAccounts] = new SavingsAccount();
 		}
 		else if (type == accountType.CREDIT) {
-			accounts[numAccounts] = new CheckingsAccount();
+			accounts[numAccounts] = new CreditAccount();
 		}
 		else {
 			return;
