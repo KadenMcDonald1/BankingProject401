@@ -3,8 +3,8 @@ public class CheckingsAccount extends Account{
 
 	private double dailyWithdrawalLimit;
 	
-	public CheckingsAccount() { 
-		super(accountType.CHECKINGS);
+	public CheckingsAccount(double startingDeposit) { 
+		super(accountType.CHECKINGS, startingDeposit);
 		dailyWithdrawalLimit = 1000;
 	}
 	

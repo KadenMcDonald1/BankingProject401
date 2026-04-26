@@ -1,0 +1,5 @@
+NumberOfAccounts 2
+format: AccountID,accountType,isFrozen,balance,withdrawalLimit/creditLimit,interestRate
+
+0,CHECKINGS,false,10000,1000,null
+1,SAVINGS,false,20000,500,null

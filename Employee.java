@@ -2,8 +2,12 @@
 public class Employee extends User {
 	private Customer curCust;// may be stored in the main client class
 	
-	public Employee(String pin) {
+	public Employee(String pin) {//for new Employees.
 		super(pin);
+	}
+	public Employee(int ID, String pin) {//for existing Employees.
+		super(pin);
+		userID = ID;
 	}
 	
 	public void setCurCust(Customer newCust) {
