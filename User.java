@@ -1,6 +1,6 @@
 
 abstract class User {
-	private int userID;
+	protected int userID; //this being protected may cause issues...
 	private String pin;
 	private boolean isLoggedIn;
 	public static int userIDCounter = 0;
@@ -18,6 +18,9 @@ abstract class User {
 	public boolean getIsLoggedIn() {
 		return isLoggedIn;
 	}
+	public String getPin() {
+		return pin;
+	}
 	public boolean checkPin(String Pin) {// May have this function built into the server later 
 		if (pin.equals(Pin)) {			 // (meaning: may not need it here)
 			return true;
@@ -31,6 +34,12 @@ abstract class User {
 	}
 	public void setPin(String newPin) {
 		pin = newPin;
+	}
+	public void spinBackIDCounter() {
+		userIDCounter--;
+	}
+	public void setIDCounter(int i) {
+		userIDCounter = i;
 	}
 	
 }

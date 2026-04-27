@@ -6,13 +6,23 @@ public class Customer extends User{
 	private String customerName;
 	private int numAccounts;
 	
-	public Customer(String pin,  String secQ, String secA,String name) {
+	public Customer(String pin, String secQ, String secA, String name) {//for new customers.
 		super(pin);
 		securityQ = secQ;
 		securityA = secA;
 		customerName = name;
 		numAccounts = 0;
 		accounts = new Account[5];
+	}
+	public Customer(int ID, String pin, String secQ, String secA, String name) {//for customers that exist in the files.
+		super(pin);
+		securityQ = secQ;
+		securityA = secA;
+		customerName = name;
+		numAccounts = 0;
+		accounts = new Account[5];
+		userID = ID;
+		spinBackIDCounter();
 	}
 	
 	public Account[] getAccounts() {
@@ -45,8 +55,14 @@ public class Customer extends User{
 	public void seSecurityA(String secA) {
 		securityA = secA;
 	}
+	public int getNumAccounts() {
+		return numAccounts;
+	}
+	public String getCustName() {
+		return customerName;
+	}
 	
-	public void addAccount(accountType type) { 
+	public void addAccount(accountType type, double startingDeposit) { 
 		if (numAccounts == accounts.length){ // if array has no spots open
 			Account[] temp = accounts;
 			accounts = new Account[(temp.length)*2];
@@ -55,13 +71,13 @@ public class Customer extends User{
 			}
 		}
 		if (type == accountType.CHECKINGS) {// do we need both a savings and a checkings?...
-			accounts[numAccounts] = new CheckingsAccount();
+			accounts[numAccounts] = new CheckingsAccount(startingDeposit);
 		}
 		else if (type == accountType.SAVINGS) {
-			accounts[numAccounts] = new SavingsAccount();
+			accounts[numAccounts] = new SavingsAccount(startingDeposit);
 		}
 		else if (type == accountType.CREDIT) {
-			accounts[numAccounts] = new CreditAccount();
+			accounts[numAccounts] = new CreditAccount(startingDeposit);
 		}
 		else {
 			return;
@@ -82,6 +98,11 @@ public class Customer extends User{
 			return succsess;
 		}
 		return succsess;
+	}
+	
+	public boolean transferToOusideAccounts(int recievingCustomer, int sendingAccountID, int recievingAccountID, double amount) {
+		
+		return false; // need to implement still...
 	}
 	
 }

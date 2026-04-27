@@ -1,0 +1,5 @@
+NumberOfEmployees 2
+format: userID,pin,isLoggedIn
+
+0,1234,true
+3,5678,false

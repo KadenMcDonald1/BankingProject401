@@ -3,8 +3,8 @@ public class SavingsAccount extends Account{
 	
 	private double dailyWithdrawalLimit;
 	
-	public SavingsAccount() {
-		super(accountType.SAVINGS);
+	public SavingsAccount(double startingAmount) {
+		super(accountType.SAVINGS, startingAmount);
 		dailyWithdrawalLimit = 500;
 	}
 	

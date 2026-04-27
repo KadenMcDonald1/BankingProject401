@@ -1,1 +1,1 @@
-public enum commandStatus {SUCCESSS, FAILURE, UNDEFINED}
+public enum commandStatus {SUCCESS, FAILURE, UNDEFINED}

@@ -2,47 +2,55 @@ import java.io.Serializable;
 
 public class Message implements Serializable {
 	
-	private transactionType tType;
-	private commandStatus cStatus; 
+	private commandStatus cStatus;  
 	private commandType cType;
 	private userType uType;
 	private userStatus uStatus;
+	private Customer currCust;
+	private Employee activeEmployee;
 	private String userID;
 	private String text;
 	
 	public Message(){
-		tType = transactionType.UNDEFINED;
 		cStatus = commandStatus.UNDEFINED;
 		cType = commandType.UNDEFINED;
 		uType = userType.UNDEFINED;
 		uStatus = userStatus.UNDEFINED;
+		currCust = null;
+		activeEmployee = null;
 		userID = "Undefined";
 		text = "Undefined";
 	}
-	public Message(transactionType TType, commandStatus CStatus, commandType CType, userType UType, userStatus UStatus, String UserID, String Text){
-		tType = TType;
+	public Message(userType UType, userStatus UStatus, commandType CType, commandStatus CStatus,
+				   Customer CurrCust, Employee ActiveEmployee, String UserID, String Text) {
+					
 		cStatus = CStatus;
 		cType = CType;
 		uType = UType;
 		uStatus = UStatus;
 		userID = UserID;
 		text = Text;
+		currCust = CurrCust;
+		activeEmployee = ActiveEmployee;
 	}
 	
-	public transactionType getTType(){
-		return tType;
-	}
 	public commandStatus getCStatus(){
 		return cStatus;
 	}
 	public commandType getCType(){
 		return cType;
 	}
-	public userType getUserType(){
+	public userType getUType(){
 		return uType;
 	}
 	public userStatus getUStatus(){
 		return uStatus;
+	}
+	public Customer getCurrCust() {
+		return currCust;
+	}
+	public Employee getActEmployee() {
+		return activeEmployee;
 	}
 	public String GetUserID() {
 		return userID;
