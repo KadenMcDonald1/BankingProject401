@@ -10,7 +10,7 @@ public class CheckingsAccount extends Account{
 	
 	@Override
 	public boolean withdrawal(double amount) {
-		if (amount > 0 && balance >= amount) {
+		if (amount > 0 && balance >= amount && getIsFrozen() == false && amount <= dailyWithdrawalLimit) {
 			balance = balance - amount;
 			return true;
 		}
@@ -18,10 +18,14 @@ public class CheckingsAccount extends Account{
 	}
 	@Override
 	public boolean deposit(double amount) {
-		if (amount > 0) {
+		if (amount > 0 && getIsFrozen() == false) {
 			balance = amount + balance;
 			return true;
 		}
 		return false;
+	}
+	
+	public double getDailyWithdrawalLimit(){
+		return dailyWithdrawalLimit;
 	}
 }

@@ -21,6 +21,10 @@ public class CreditAccount extends Account{
 		return creditLimit;
 	}
 	
+	public double getInterestRatePerMonth() {
+		return interestRatePerMonth;
+	}
+	
 	@Override
 	public boolean deposit(double amount) {//could also let the customer put as much as they want into their credit...
 		if (amount > 0 && balance < 100) {
@@ -31,7 +35,7 @@ public class CreditAccount extends Account{
 	}
 	@Override
 	public boolean withdrawal(double amount) {
-		if ((balance - amount) >= -2000) {
+		if ((balance - amount) >= -creditLimit) {
 			balance = balance - amount;
 			return true;
 		}
