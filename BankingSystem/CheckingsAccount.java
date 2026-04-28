@@ -1,11 +1,11 @@
+package BankingSystem;
+public class CheckingsAccount extends Account{
 
-public class SavingsAccount extends Account{
-	
 	private double dailyWithdrawalLimit;
 	
-	public SavingsAccount(double startingAmount) {
-		super(accountType.SAVINGS, startingAmount);
-		dailyWithdrawalLimit = 500;
+	public CheckingsAccount(double startingDeposit) { 
+		super(accountType.CHECKINGS, startingDeposit);
+		dailyWithdrawalLimit = 1000;
 	}
 	
 	@Override
@@ -25,7 +25,7 @@ public class SavingsAccount extends Account{
 		return false;
 	}
 	
-	public double getDailyWithdrawalLimit() {
+	public double getDailyWithdrawalLimit(){
 		return dailyWithdrawalLimit;
 	}
 }

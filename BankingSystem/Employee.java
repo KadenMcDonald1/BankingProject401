@@ -1,3 +1,4 @@
+package BankingSystem;
 
 public class Employee extends User {
 	private Customer curCust;// may be stored in the main client class
