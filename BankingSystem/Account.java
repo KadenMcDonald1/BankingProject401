@@ -1,6 +1,6 @@
 package BankingSystem;
 
-abstract class Account {
+public abstract class Account {
 	private int accountID;
 	protected double balance;
 	private boolean isFrozen;
