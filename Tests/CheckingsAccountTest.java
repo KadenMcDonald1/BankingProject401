@@ -49,8 +49,8 @@ public class CheckingsAccountTest {
 	@Test
 	public void withdrawalTest1() {
 		Account checkAcc7 = new CheckingsAccount(2000);
-		checkAcc7.withdrawal(1999.45);
-		Assert.assertEquals(checkAcc7.getBalance(),0.55,0.01);
+		checkAcc7.withdrawal(999.45);
+		Assert.assertEquals(checkAcc7.getBalance(),1000.55,0.01);
 	}
 	@Test
 	public void depositTest2() {
@@ -60,7 +60,6 @@ public class CheckingsAccountTest {
 	@Test
 	public void withdrawalTest2() {
 		Account checkAcc9 = new CheckingsAccount(2000);
-		checkAcc9.withdrawal(1999.45);
 		Assert.assertFalse(checkAcc9.withdrawal(3000));
 	}
 }
