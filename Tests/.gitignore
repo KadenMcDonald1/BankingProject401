@@ -2,3 +2,6 @@
 /TestSuite.class
 /SavingsAccountTest.class
 /CheckingsAccountTest.class
+/CreditAccountTest.class
+/CustomerTest.class
+/EmployeeTest.class

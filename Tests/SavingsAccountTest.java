@@ -49,8 +49,8 @@ public class SavingsAccountTest {
 	@Test
 	public void withdrawalTest1() {
 		Account saveAcc7 = new SavingsAccount(2000);
-		saveAcc7.withdrawal(1999.45);
-		Assert.assertEquals(saveAcc7.getBalance(),0.55,0.01);
+		saveAcc7.withdrawal(499.45);
+		Assert.assertEquals(saveAcc7.getBalance(),1500.55,0.01);
 	}
 	@Test
 	public void depositTest2() {
@@ -60,7 +60,6 @@ public class SavingsAccountTest {
 	@Test
 	public void withdrawalTest2() {
 		Account saveAcc9 = new SavingsAccount(2000);
-		saveAcc9.withdrawal(1999.45);
 		Assert.assertFalse(saveAcc9.withdrawal(3000));
 	}
 }

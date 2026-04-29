@@ -29,8 +29,7 @@ public class Customer extends User{
 	}
 	
 	public Account getAccountByID(int id) {
-		int i;
-		for (i = 0; i < numAccounts; i++) {
+		for (int i = 0; i < numAccounts; i++) {
 			if (id == accounts[i].getAccountID()) {
 				return accounts[i];
 			}
@@ -77,7 +76,7 @@ public class Customer extends User{
 			accounts[numAccounts] = new SavingsAccount(startingDeposit);
 		}
 		else if (type == accountType.CREDIT) {
-			accounts[numAccounts] = new CreditAccount(startingDeposit);
+			accounts[numAccounts] = new CreditAccount();
 		}
 		else {
 			return;

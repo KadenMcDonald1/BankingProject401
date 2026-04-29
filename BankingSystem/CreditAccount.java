@@ -4,8 +4,8 @@ public class CreditAccount extends Account{
 	private double creditLimit;
 	private double interestRatePerMonth;
 	
-	public CreditAccount(double startingAmount) {
-		super(accountType.CREDIT, startingAmount);
+	public CreditAccount() {
+		super(accountType.CREDIT, 0);
 		creditLimit = 2000;
 		interestRatePerMonth = 0.02;
 	}

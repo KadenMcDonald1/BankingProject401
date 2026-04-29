@@ -2,6 +2,8 @@ package BankingSystem;
 public class CheckingsAccount extends Account{
 
 	private double dailyWithdrawalLimit;
+	private int currMonth = 0;
+	private int currDay = 0;
 	
 	public CheckingsAccount(double startingDeposit) { 
 		super(accountType.CHECKINGS, startingDeposit);
