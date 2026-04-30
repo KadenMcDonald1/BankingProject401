@@ -111,7 +111,7 @@ public class Customer extends User{
 	}
 	
 	
-	
+	//Transfers money between two accounts owned by the same customer
 	public boolean transferBetweenOwnedAccounts(int sendingAccountID, int recievingAccountID, double amount) {
 		Account account1 = getAccountByID(sendingAccountID);
 		Account account2 = getAccountByID(recievingAccountID);
@@ -130,7 +130,7 @@ public class Customer extends User{
 		
 	}
 	
-	public boolean transferToOusideAccounts(Customer recievingCustomer, int sendingAccountID, int recievingAccountID, double amount) {
+	public boolean transferToOutsideAccounts(Customer recievingCustomer, int sendingAccountID, int recievingAccountID, double amount) {
 		Account account1 = getAccountByID(sendingAccountID);
 		Account account2 = recievingCustomer.getAccountByID(recievingAccountID);
 		
