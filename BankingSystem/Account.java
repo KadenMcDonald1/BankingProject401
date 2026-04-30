@@ -1,12 +1,14 @@
 package BankingSystem;
 
 public abstract class Account {
+	//Each account has a unique ID, a balance, a frozen status, and a type
 	private int accountID;
 	protected double balance;
 	private boolean isFrozen;
 	private static int accountIDCounter = 0;
 	protected accountType accType;
 
+	//Creates a new account with a starting deposit and automatically assigns an account ID
 	public Account(accountType aType, double startingDeposit){
 		balance = startingDeposit;
 
