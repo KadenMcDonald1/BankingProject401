@@ -318,6 +318,56 @@ public class Server {
 		return true; //can't find user.
 	}
 	
+	public static void setNewUserIDNum(String ID, String file) {
+		
+		try {
+			Path path = Paths.get(file);
+
+			String output = Files.readString(path);
+			String[] lines = output.split("\n");
+			
+			String[] chunks = lines[lines.length-1].split(",");
+			
+			chunks[0] = ID;
+			lines[lines.length-1] = String.join(",", chunks);
+
+			Files.write(path, Arrays.asList(lines));
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static int getCurrUserIDCounterPos() {
+		try {
+			Path path = Paths.get("CustomerList.txt");
+			String output = Files.readString(path);
+			String[] lines = output.split("\n");
+			String[] chunks = lines[lines.length-1].split(",");
+			
+			int highestCustID =Integer.parseInt(chunks[0]);
+			
+			path = Paths.get("EmployeeList.txt");
+			output = Files.readString(path);
+			lines = output.split("\n");
+			chunks = lines[lines.length-1].split(",");
+
+			int highestEmplID =Integer.parseInt(chunks[0]);
+			
+			if (highestCustID>highestEmplID) {
+				return highestCustID++;
+			}
+			else if (highestEmplID>highestCustID) {
+				return highestEmplID++;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return 0; //if zero is returned there was an error.
+	}
+	
+	
+	
 	
 	
 	
@@ -418,15 +468,6 @@ public class Server {
 									
 									cont = false;
 								}
-//								else if (msg.getCType() == commandType.ADD_LOG) { //implement if time permits
-//									
-//									AddLog(msg.GetUserID(), msg.getText());
-//									
-//									response = new Message(...);
-//									objectOutputStream.writeObject(response);
-//									objectOutputStream.flush();
-//	
-//								}
 								else {// commandType is wrong
 									response = new Message(userType.CUSTOMER,userStatus.lOGGED_IN,msg.getCType(),commandStatus.FAILURE,
 															currCustObj,null,currCustInfo[0],"Incorrect Message Type\n");
@@ -586,12 +627,20 @@ public class Server {
 								}
 								else if (msg.getCType() == commandType.CREATE_CUSTOMER) { 
 									
-									// Take in the customer and create his account file and 
+									// Take in the customers and create his account file and 
 									// then append the customer onto the CustomerList.txt.
+									
+									// After that then call a method to change the customers ID in file to the highestIDVal+1.
 									
 									PushAccountInfo(msg.getCurrCust());
 									PushNewCustomer(msg.getCurrCust());
+									setNewUserIDNum(getCurrUserIDCounterPos()+"","CustomerList.txt");
 									
+									response = new Message(userType.CUSTOMER,userStatus.UNDEFINED,commandType.CREATE_CUSTOMER,commandStatus.SUCCESS,
+											null,currEmplObj,null,"Cusotmer Sucsessfully Created, Returning to Login Screen\n");
+									
+									objectOutputStream.writeObject(response);
+									objectOutputStream.flush();
 								}
 								else if (msg.getCType() == commandType.LOGOUT) {//employee logging out
 									editUserStatus(msg.GetUserID(), "false", "EmployeeList.txt");
