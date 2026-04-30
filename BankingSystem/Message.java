@@ -12,6 +12,7 @@ public class Message implements Serializable {
 	private String userID;
 	private String text;
 	
+	//Creates a default undefined message
 	public Message(){
 		cStatus = commandStatus.UNDEFINED;
 		cType = commandType.UNDEFINED;
@@ -22,6 +23,8 @@ public class Message implements Serializable {
 		userID = "Undefined";
 		text = "Undefined";
 	}
+	
+	//Creates a message with command, user, and text information for client-server communication
 	public Message(userType UType, userStatus UStatus, commandType CType, commandStatus CStatus,
 				   Customer CurrCust, Employee ActiveEmployee, String UserID, String Text) {
 					
