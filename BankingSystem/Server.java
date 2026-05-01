@@ -40,8 +40,8 @@ public class Server {
 		return ListOCustomers;
 	}
 	// Will need to call these 2 ^v methods multiple times through the running process to double check
-	// who is currently loggfed in and logged out at that time. (it will most likely need to be 
-	// done when login requests are recieved and transfer requsts are recieved)
+	// who is currently logged in and logged out at that time. (it will most likely need to be 
+	// done when login requests are received and transfer requests are received)
 	public static String[][] LoadEmployees() {
 		String[] lines = null;
 		String[][] ListOEmployees = null;
@@ -118,6 +118,7 @@ public class Server {
 		return null;
 	}
 	
+	//Loads all accounts for one customer from that customer's account file
 	public static String[][] loadAccounts(String ID) {
 		
 		String[] lines = null; 
@@ -142,9 +143,11 @@ public class Server {
 		return ListOAccounts;
 	}
 	
+	//Creates a Customer object from saved file data and rebuilds their accounts
 	public static Customer createExistingCustomerObject(String id, String a, String b, String c, String d, String[][] accList) {
 		Customer temp = new Customer(Integer.parseInt(id),a,b,c,d);
 		
+		//Loops through account list and recreates each account based on its type and balance
 		for (int i = 0; i < accList.length; i++) {
 			accountType type = accountType.UNDEFINED;
 			if (accList[i][1].equals("CHECKINGS")) {
@@ -156,11 +159,12 @@ public class Server {
 			else if (accList[i][1].equals("CREDIT")) {
 				type = accountType.CREDIT;
 			}
-			temp.addAccount(type,Double.parseDouble(accList[i][3]));
+			temp.addAccount(type,Double.parseDouble(accList[i][3])); //Note: This currently creates new account IDs instead of using saved ones from the file
 		}
 		return temp;
 	}
 	
+	//Updates the login status of a user (true/false) in the specified file
 	public static void editUserStatus(String ID, String status, String file) {
 		
 		try {
@@ -169,6 +173,7 @@ public class Server {
 			String output = Files.readString(path);
 			String[] lines = output.split("\n");
 
+			//Searches for the matching user ID and updates their login status
 			for (int i = 3; i < lines.length; i++) {
 				String[] chunks = lines[i].split(",");
 				
@@ -185,6 +190,7 @@ public class Server {
 		}
 	}
 	
+	//Updates an existing customer's information in CustomerList.txt
 	public static void PushEditedCustomerInfo(Customer customer) {
 		try {
 			Path path = Paths.get("CustomerList.txt");
@@ -192,6 +198,7 @@ public class Server {
 			String output = Files.readString(path);
 			String[] lines = output.split("\n");
 
+			//Finds the customer by ID and replaces their stored data with updated values
 			for (int i = 3; i < lines.length; i++) {
 				String[] chunks = lines[i].split(",");
 				
@@ -213,10 +220,12 @@ public class Server {
 		}
 	}
 	
+	//Appends a new customer to CustomerList.txt
 	public static void PushNewCustomer(Customer customer) {
 		try {
 			Path path = Paths.get("CustomerList.txt");
 			
+			//Formats the new customer data into a line matching the file structure
 			String newCustLine = "\n"+customer.getUserID()+","+customer.getPin().trim()+","+customer.getIsLoggedIn()+
 									","+customer.getCustName().trim()+","+customer.getSecurityQ().trim()+","+
 									customer.getSecurityA().trim()+","+customer.getNumAccounts();
@@ -231,6 +240,7 @@ public class Server {
 		}
 	}
 	
+	//Writes all of a customer's account information back to their account file
 	public static void PushAccountInfo(Customer cust) {
 		String userID = cust.getUserID()+"";
 		Account[] accounts = cust.getAccounts();
@@ -384,7 +394,7 @@ public class Server {
 						
 						String[] currCustInfo = checkIDAndPin(msg.GetUserID(), msg.getText(), userType.CUSTOMER);
 						
-						if (currCustInfo!=null) {//Customer login sucsessful.
+						if (currCustInfo!=null) {//Customer login successful.
 							
 							String[][] custAccountList = loadAccounts(currCustInfo[0]);
 							
@@ -394,7 +404,7 @@ public class Server {
 							Customer currCustObj = createExistingCustomerObject(currCustInfo[0],currCustInfo[1],currCustInfo[4], //creates customer and their accounts.
 																				currCustInfo[5],currCustInfo[3],custAccountList);
 							//send back a customer object and accounts
-							response = new Message(userType.CUSTOMER,userStatus.lOGGED_IN,commandType.LOGIN,commandStatus.SUCCESS,
+							response = new Message(userType.CUSTOMER,userStatus.LOGGED_IN,commandType.LOGIN,commandStatus.SUCCESS,
 													currCustObj,null,currCustInfo[0],"ATM Login Succsessful, Welcome "+currCustInfo[3]+"\n");
 							objectOutputStream.writeObject(response);
 							objectOutputStream.flush();
@@ -428,7 +438,7 @@ public class Server {
 //	
 //								}
 								else {// commandType is wrong
-									response = new Message(userType.CUSTOMER,userStatus.lOGGED_IN,msg.getCType(),commandStatus.FAILURE,
+									response = new Message(userType.CUSTOMER,userStatus.LOGGED_IN,msg.getCType(),commandStatus.FAILURE,
 															currCustObj,null,currCustInfo[0],"Incorrect Message Type\n");
 									objectOutputStream.writeObject(response);
 									objectOutputStream.flush();
@@ -437,7 +447,7 @@ public class Server {
 								employeeList = LoadEmployees();
 							}
 						}
-						else { //Customer login not sucsessful.
+						else { //Customer login not successful.
 							response = new Message(userType.CUSTOMER,userStatus.UNDEFINED,commandType.LOGIN,commandStatus.FAILURE,
 									null,null,null,"ATM Login Failure\n");
 							objectOutputStream.writeObject(response);
@@ -455,7 +465,7 @@ public class Server {
 						
 							Employee currEmplObj = new Employee(Integer.parseInt(currEmplInfo[0]),currEmplInfo[1]);
 							
-							response = new Message(userType.EMPLOYEE,userStatus.lOGGED_IN,commandType.LOGIN,commandStatus.SUCCESS,
+							response = new Message(userType.EMPLOYEE,userStatus.LOGGED_IN,commandType.LOGIN,commandStatus.SUCCESS,
 													null,currEmplObj,currEmplInfo[0],"Teller Employee Login Succsessful");
 							objectOutputStream.writeObject(response);
 							objectOutputStream.flush();
@@ -470,7 +480,7 @@ public class Server {
 									String[] passkeys = msg.getText().split("\\|");
 									String[] currCustInfo = checkIDAndPinAndSecA(msg.GetUserID(), passkeys[0], passkeys[1]);
 									
-									if (currCustInfo!=null) {//Teller Customer login sucsessful.
+									if (currCustInfo!=null) {//Teller Customer login successful.
 										 
 										String[][] custAccountList = loadAccounts(currCustInfo[0]);
 										
@@ -480,7 +490,7 @@ public class Server {
 										Customer currCustObj = createExistingCustomerObject(currCustInfo[0],currCustInfo[1],currCustInfo[4],
 																							currCustInfo[5],currCustInfo[3],custAccountList);
 										//send back a customer object and accounts
-										response = new Message(userType.CUSTOMER,userStatus.lOGGED_IN,commandType.LOGIN,commandStatus.SUCCESS,
+										response = new Message(userType.CUSTOMER,userStatus.LOGGED_IN,commandType.LOGIN,commandStatus.SUCCESS,
 																currCustObj,currEmplObj,currCustInfo[0],"Teller Customer Login Succsessful\n");
 										objectOutputStream.writeObject(response);
 										objectOutputStream.flush();
@@ -513,7 +523,7 @@ public class Server {
 													
 													editUserStatus(msg.getCurrCust().getUserID()+"", "true", "CustomerList.txt");
 													
-													response = new Message(userType.CUSTOMER,userStatus.lOGGED_IN,commandType.LOOKUP_CUSTOMER,commandStatus.SUCCESS,
+													response = new Message(userType.CUSTOMER,userStatus.LOGGED_IN,commandType.LOOKUP_CUSTOMER,commandStatus.SUCCESS,
 																			recievingCust,currEmplObj,"","Customer is able to recieve transfer.\n");
 													
 													msg = (Message) objectInputStream.readObject();
@@ -563,12 +573,12 @@ public class Server {
 												
 											}
 											
-											// Options to remove singluar accounts from customers can be pushed durring logout and do not require
+											// Options to remove singluar accounts from customers can be pushed during logout and do not require
 											// their own calls and changes in the server, although when these changes are pushed, the numAccounts 
-											// on the CustomersList will need to be adjusted, not only the inividual customer account info.
+											// on the CustomersList will need to be adjusted, not only the individual customer account info.
 											
 											else {// commandType is wrong
-												response = new Message(userType.CUSTOMER,userStatus.lOGGED_IN,msg.getCType(),commandStatus.FAILURE,
+												response = new Message(userType.CUSTOMER,userStatus.LOGGED_IN,msg.getCType(),commandStatus.FAILURE,
 																		msg.getCurrCust(),currEmplObj,currCustInfo[0],"Incorrect Message Type\n");
 												objectOutputStream.writeObject(response);
 												objectOutputStream.flush();
@@ -577,7 +587,7 @@ public class Server {
 											employeeList = LoadEmployees();
 										}
 									}
-									else {//Teller Customer login unsucsessful.
+									else {//Teller Customer login unsuccessful.
 										response = new Message(userType.CUSTOMER,userStatus.UNDEFINED,commandType.LOGIN,commandStatus.FAILURE,
 												null,currEmplObj,null,"Teller Customer Login Failure\n");
 										objectOutputStream.writeObject(response);
@@ -605,7 +615,7 @@ public class Server {
 									cont = false;
 								}
 								else {//commandType is wrong
-									response = new Message(userType.EMPLOYEE,userStatus.lOGGED_IN,msg.getCType(),commandStatus.FAILURE,
+									response = new Message(userType.EMPLOYEE,userStatus.LOGGED_IN,msg.getCType(),commandStatus.FAILURE,
 															null,currEmplObj,currEmplInfo[0],"Incorrect Message Type\n");
 									objectOutputStream.writeObject(response);
 									objectOutputStream.flush();
@@ -614,7 +624,7 @@ public class Server {
 								employeeList = LoadEmployees();
 							}
 						}
-						else { //Employee login not sucsessful.
+						else { //Employee login not successful.
 							response = new Message(userType.CUSTOMER,userStatus.UNDEFINED,commandType.LOGIN,commandStatus.FAILURE,
 									null,null,null,"ATM Login Failure\n");
 							objectOutputStream.writeObject(response);

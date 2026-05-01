@@ -47,7 +47,8 @@ public class Employee extends User {
 		return curCust.transferBetweenOwnedAccounts(sendingAccount, recievingAccount, amount);
 	}
 	
+	//Allows the employee to transfer money from the current customer to another customer
 	public boolean transferToOutsideCust(Customer recievingCustomer, int sendingAccountID, int recievingAccountID, double amount) {
-		return curCust.transferToOusideAccounts(recievingCustomer, sendingAccountID, recievingAccountID, amount);
+		return curCust.transferToOutsideAccounts(recievingCustomer, sendingAccountID, recievingAccountID, amount);
 	}
 }

@@ -10,6 +10,7 @@ public class CheckingsAccount extends Account{
 		dailyWithdrawalLimit = 1000;
 	}
 	
+	//Withdraws money if the amount is valid, the account is not frozen, and the daily limit is not exceeded
 	@Override
 	public boolean withdrawal(double amount) {
 		if (amount > 0 && balance >= amount && getIsFrozen() == false && amount <= dailyWithdrawalLimit) {
@@ -18,6 +19,8 @@ public class CheckingsAccount extends Account{
 		}
 		return false;
 	}
+	
+	//Deposits money if the amount is valid and the account is not frozen
 	@Override
 	public boolean deposit(double amount) {
 		if (amount > 0 && getIsFrozen() == false) {
@@ -27,6 +30,7 @@ public class CheckingsAccount extends Account{
 		return false;
 	}
 	
+	//Checkings accounts have a daily withdrawal limit
 	public double getDailyWithdrawalLimit(){
 		return dailyWithdrawalLimit;
 	}

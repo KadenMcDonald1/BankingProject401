@@ -1,6 +1,7 @@
 package BankingSystem;
 public class CreditAccount extends Account{
 	
+	//Credit accounts store a credit limit and monthly interest rate
 	private double creditLimit;
 	private double interestRatePerMonth;
 	
@@ -10,6 +11,7 @@ public class CreditAccount extends Account{
 		interestRatePerMonth = 0.02;
 	}
 	
+	//Adds monthly interest when the credit account has a negative balance
 	public void calculateInterest() {//set up to call at the start of the month or every 30 days...
 		if (balance<0) {			 // could maybe add a variable that keeps track of the last time this card
 									 // was used and if the month has changed since then, then call the method (this would be done on login)
@@ -33,6 +35,8 @@ public class CreditAccount extends Account{
 		}
 		return false;
 	}
+	
+	//Allows withdrawals as long as the credit limit is not exceeded
 	@Override
 	public boolean withdrawal(double amount) {
 		if ((balance - amount) >= -creditLimit) {

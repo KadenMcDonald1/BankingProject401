@@ -82,6 +82,6 @@ public class CustomerTest {
 		Account[] accounts0 = cust10.getAccounts();
 		cust11.addAccount(accountType.SAVINGS, 4000);
 		Account[] accounts1 = cust11.getAccounts();
-		Assert.assertTrue(cust10.transferToOusideAccounts(cust11,accounts0[0].getAccountID(),accounts1[0].getAccountID(),430.59));
+		Assert.assertTrue(cust10.transferToOutsideAccounts(cust11,accounts0[0].getAccountID(),accounts1[0].getAccountID(),430.59));
 	}
 }

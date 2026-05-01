@@ -1,2 +1,2 @@
 package BankingSystem;
-public enum transactionType {DEPOSIT, WITHDRAWL, TRANSFER, UNDEFINED}
+public enum transactionType {DEPOSIT, WITHDRAWAL, TRANSFER, UNDEFINED}
