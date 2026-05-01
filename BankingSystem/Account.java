@@ -1,6 +1,8 @@
 package BankingSystem;
 
-public abstract class Account {
+import java.io.Serializable;
+
+public abstract class Account implements Serializable{
 	//Each account has a unique ID, a balance, a frozen status, and a type
 	private int accountID;
 	protected double balance;
