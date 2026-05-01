@@ -103,6 +103,7 @@ public class BankGUI implements BankUserInterface {
 		
 		if (response == null) {
 			JOptionPane.showMessageDialog(frame, "Error");
+			return;
 		}
 		
 		if (response.getCStatus() == commandStatus.SUCCESS) {
@@ -235,6 +236,7 @@ public class BankGUI implements BankUserInterface {
 
 				if (response == null) {
 					JOptionPane.showMessageDialog(frame, "Error");
+					return;
 				}
 				
 				customerFrame.dispose();
