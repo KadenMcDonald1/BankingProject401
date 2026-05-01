@@ -1,5 +1,8 @@
 package BankingSystem;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public abstract class Account {
 	private int accountID;
 	protected double balance;
@@ -38,6 +41,10 @@ public abstract class Account {
 	}
 	public boolean getIsFrozen() {
 		return isFrozen;
+	}
+	public String getFormatedDate() {
+		SimpleDateFormat dateInNum = new SimpleDateFormat("MM-dd-yyyy"); 
+		return dateInNum.format(new Date());
 	}
 	// deposit and withdrawal functions may be a little different for credit vs savings/checkings...
 	public abstract boolean withdrawal(double amount);
