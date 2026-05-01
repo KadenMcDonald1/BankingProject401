@@ -65,6 +65,7 @@ public class BankGUI implements BankUserInterface {
 
 		exitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				client.close();
 				System.exit(0);
 			}
 		});
@@ -78,12 +79,12 @@ public class BankGUI implements BankUserInterface {
 	private void doCustomerLogin() {
 		JPanel panel = new JPanel(new GridLayout(2, 2));			// panel to get log in info
 
-		JTextField idField = new JTextField();		// MAYBE NEED TO CHANGE TO SEARCH FOR CUSTOMERS WITH ID
+		JTextField idField = new JTextField();
 		JPasswordField pinField = new JPasswordField();				// makes password hidden when typing
 
-		panel.add(new JLabel("Customer ID:"));
+		panel.add(new JLabel("Customer ID: "));
 		panel.add(idField);
-		panel.add(new JLabel("PIN:"));
+		panel.add(new JLabel("PIN: "));
 		panel.add(pinField);
 
 		int result = JOptionPane.showConfirmDialog(frame, panel, "Customer Login", JOptionPane.OK_CANCEL_OPTION);
@@ -120,7 +121,6 @@ public class BankGUI implements BankUserInterface {
 
 	
 	
-	// FINISH AFTER IMPLEMENTING EMPLOYEE LOGIN
 	private void doEmployeeLogin() {
 		JPanel panel = new JPanel(new GridLayout(2, 2));			// panel to get log in info
 
@@ -252,7 +252,46 @@ public class BankGUI implements BankUserInterface {
 	}
 	
 	private void doDeposit() {
-		//finish later
+		JPanel panel = new JPanel(new GridLayout(2, 2));
+		
+		JTextField idField = new JTextField();
+		JTextField amountField = new JTextField();
+
+		panel.add(new JLabel("Account ID: "));			// maybe have a way for customers to check their account IDs
+		panel.add(idField);
+		panel.add(new JLabel("Ammount: "));
+		panel.add(amountField);
+
+		int result = JOptionPane.showConfirmDialog(null, panel, "Deposit", JOptionPane.OK_CANCEL_OPTION);
+
+		// if the user cancels or closes the window then return
+		if (result != JOptionPane.OK_OPTION) {
+			return;
+		}
+
+		// get the id and amount from user as text
+		String idText = idField.getText();
+		String amountText = amountField.getText();
+		
+		try {
+			int accountID = Integer.parseInt(idText);
+			double amount = Double.parseDouble(amountText);
+			
+			// find the matching account 
+			Account account = currCust.getAccountByID(accountID);
+			
+			//if there isnt an account with that ID then return
+			if (account == null) {
+				JOptionPane.showMessageDialog(null, "Account not found");
+				return;
+			} else if (account.deposit(amount)) {	// show success message if the deposit returns true otherwise the deposit failed
+				JOptionPane.showMessageDialog(null, "Deposit Successful!");
+			} else {
+				JOptionPane.showMessageDialog(null, "Deposit Failed");
+			}
+		} catch (NumberFormatException e) {
+			
+		}
 	}
 	private void doWithdraw() {
 		//finish later
