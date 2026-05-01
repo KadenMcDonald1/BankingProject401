@@ -228,6 +228,15 @@ public class BankGUI implements BankUserInterface {
 
 		logoutButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Message logoutMsg = new Message(userType.CUSTOMER, userStatus.LOGGED_IN, commandType.LOGOUT,
+						commandStatus.UNDEFINED, currCust, null, currCust.getUserID() + "", "");
+
+				Message response = client.sendMessage(logoutMsg);
+
+				if (response == null) {
+					JOptionPane.showMessageDialog(frame, "Error");
+				}
+				
 				customerFrame.dispose();
 				currCust = null;			//reset whoever was currently logged in
 				createWindow();				// go back to log in screen
