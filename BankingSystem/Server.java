@@ -245,9 +245,9 @@ public class Server {
 		String userID = cust.getUserID()+"";
 		Account[] accounts = cust.getAccounts();
 		
-		String pushVal = "NumberOfAccounts "+accounts.length+"\nformat: AccountID,accountType,isFrozen,balance,"
+		String pushVal = "NumberOfAccounts "+ cust.getNumAccounts() +"\nformat: AccountID,accountType,isFrozen,balance,"
 						+ "withdrawalLimit/creditLimit,interestRate\n";
-		for (int i = 0; i < accounts.length; i++) {
+		for (int i = 0; i < cust.getNumAccounts(); i++) {
 			
 			accountType type = accounts[i].getAccType(); 
 			if (type == accountType.CHECKINGS) {

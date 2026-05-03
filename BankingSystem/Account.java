@@ -2,8 +2,10 @@ package BankingSystem;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.io.Serializable;
 
-public abstract class Account {
+public abstract class Account implements Serializable{
+
 	//Each account has a unique ID, a balance, a frozen status, and a type
 	private int accountID;
 	protected double balance;

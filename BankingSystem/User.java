@@ -1,6 +1,8 @@
 package BankingSystem;
 
-abstract class User {
+import java.io.Serializable;
+
+abstract class User implements Serializable{	
 	protected int userID; //this being protected may cause issues...
 	private String pin;
 	private boolean isLoggedIn;
