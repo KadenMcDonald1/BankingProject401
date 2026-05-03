@@ -1,3 +1,5 @@
+package BankingSystem;
+
 public class ClientApp {
     public static void main(String[] args) {
 
@@ -26,7 +28,7 @@ public class ClientApp {
             // LOGOUT example
             Message logoutMsg = new Message(
                 userType.CUSTOMER,
-                userStatus.lOGGED_IN,
+                userStatus.LOGGED_IN,
                 commandType.LOGOUT,
                 commandStatus.UNDEFINED,
                 response.getCurrCust(),
