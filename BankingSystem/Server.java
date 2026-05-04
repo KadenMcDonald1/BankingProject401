@@ -70,7 +70,7 @@ public class Server {
 	
 	public static int CalcTotalUsers() { // Need to figure out what im doing with this.....
 		return totalUserNum=numEmployees+numCustomers;
-	}													
+	}
 	
 	public static String[] checkIDAndPin(String ID, String pin, userType UType) {// can be used for both employees and customers.
 		
@@ -128,9 +128,11 @@ public class Server {
 		
 		String[] lines = null; 
 		String[] temp = null;
+
 		try { // transfer the text from the file to a string to an array. 
 			String output = Files.readString(Paths.get(ID+".txt"));
-			lines = output.split("\\R"); 
+			lines = output.split("\\R");
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
@@ -151,6 +153,7 @@ public class Server {
 	//Creates a Customer object from saved file data and rebuilds their accounts
 	public static Customer createExistingCustomerObject(String id, String a, String b, String c, String d, String[][] accList) {
 		Customer temp = new Customer(Integer.parseInt(id),a,b,c,d);
+		int idCount = 0;
 		
 		//Loops through account list and recreates each account based on its type and balance
 		for (int i = 0; i < accList.length; i++) {
@@ -164,7 +167,8 @@ public class Server {
 			else if (accList[i][1].equals("CREDIT")) {
 				type = accountType.CREDIT;
 			}
-			temp.addAccount(type,Double.parseDouble(accList[i][3])); //Note: This currently creates new account IDs instead of using saved ones from the file
+			temp.addAccount(type,Double.parseDouble(accList[i][3]),idCount); //Note: This currently creates new account IDs instead of using saved ones from the file
+			idCount++;
 		}
 		return temp;
 	}

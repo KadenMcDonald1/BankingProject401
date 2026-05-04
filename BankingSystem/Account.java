@@ -10,11 +10,10 @@ public abstract class Account implements Serializable{
 	private int accountID;
 	protected double balance;
 	private boolean isFrozen;
-	private static int accountIDCounter = 0;
 	protected accountType accType;
 
 	//Creates a new account with a starting deposit and automatically assigns an account ID
-	public Account(accountType aType, double startingDeposit){
+	public Account(accountType aType, double startingDeposit, int currAccID){
 		balance = startingDeposit;
 
 		if(balance < 0) {
@@ -23,7 +22,7 @@ public abstract class Account implements Serializable{
 		}
 		
 		isFrozen = false;
-		accountID = accountIDCounter++;
+		accountID = currAccID;
 		accType = aType;
 	}
 	
@@ -49,6 +48,9 @@ public abstract class Account implements Serializable{
 	public String getFormatedDate() {
 		SimpleDateFormat dateInNum = new SimpleDateFormat("MM-dd-yyyy"); 
 		return dateInNum.format(new Date());
+	}
+	public void setAccountID(int i) {
+		accountID = i;
 	}
 	// deposit and withdrawal functions may be a little different for credit vs savings/checkings...
 	public abstract boolean withdrawal(double amount);

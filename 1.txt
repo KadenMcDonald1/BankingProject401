@@ -2,5 +2,5 @@ NumberOfAccounts 3
 format: AccountID,accountType,isFrozen,balance,withdrawalLimit/creditLimit,interestRate
 
 0,CHECKINGS,false,10730.11,1000,null
-1,SAVINGS,false,19500.0,500,null
+1,SAVINGS,true,19500.0,500,null
 2,CREDIT,false,0.0,-2000,0.02

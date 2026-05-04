@@ -5,8 +5,8 @@ public class SavingsAccount extends Account{
 	private String prevWithdrawalDate;
 	private double amountWSF; // amountWSF = amount withdrawaled so far.
 	
-	public SavingsAccount(double startingAmount) {
-		super(accountType.SAVINGS, startingAmount);
+	public SavingsAccount(double startingAmount, int currAccID) {
+		super(accountType.SAVINGS, startingAmount, currAccID);
 		dailyWithdrawalLimit = 500;
 		prevWithdrawalDate = getFormatedDate();
 		amountWSF = 0;

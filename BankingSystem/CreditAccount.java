@@ -5,8 +5,8 @@ public class CreditAccount extends Account{
 	private double creditLimit;
 	private double interestRatePerMonth;
 	
-	public CreditAccount() {
-		super(accountType.CREDIT, 0);
+	public CreditAccount(int currAccID) {
+		super(accountType.CREDIT, 0, currAccID);
 		creditLimit = 2000;
 		interestRatePerMonth = 0.02;
 	}
