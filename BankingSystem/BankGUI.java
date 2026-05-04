@@ -12,6 +12,7 @@ public class BankGUI implements BankUserInterface {
 	private Client client;
 	private Customer currCust;
 	private Employee currEmp;
+	private String mode = "";
 	
 	public BankGUI () {
 		client = new Client();
@@ -23,39 +24,47 @@ public class BankGUI implements BankUserInterface {
 		createWindow();
 	}
 
-	//Create the frame, panel, and buttons for the starting window
 	private void createWindow() {
 		frame = new JFrame("Bank GUI");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); 	//they must use the exit button so users are properly logged out
 		frame.setSize(550, 850);
 		frame.setLocationRelativeTo(null);
-		JPanel mainPanel = new JPanel();				// create one panel to hold all the buttons
-
-		// create 1 column for all the buttons in the login screen
+		
+		if (mode.equals("")) {				// if no mode has been picked yet then show the starting mode selection screen
+			createModeSelectionWindow();	// opens customer or employee selection screen
+		} else {
+			createLoginWindow();			// if mode was already selected go straight back to that modes login screen
+		}
+	}
+	
+	// starting window for choosing ATM or employee mode
+	private void createModeSelectionWindow() {
+		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new GridLayout(0, 1));
-		
-		JButton customerLoginButton = new JButton("Customer Login");
-		JButton employeeLoginButton = new JButton("Teller Login");
+
+		JLabel label = new JLabel("Select Mode", SwingConstants.CENTER);
+		JButton atmButton = new JButton("ATM Mode");
+		JButton employeeButton = new JButton("Employee Mode");
 		JButton exitButton = new JButton("Exit");
-		
-		// add the buttons to the panel
-		mainPanel.add(customerLoginButton);
-		mainPanel.add(employeeLoginButton);
-		mainPanel.add(exitButton);
 
-		// connect buttons to methods
-		customerLoginButton.addActionListener(new ActionListener() {
+		mainPanel.add(label);	// add the title to the mode screen
+		mainPanel.add(atmButton);	// add atm mode option
+		mainPanel.add(employeeButton);	// add employee mode option
+		mainPanel.add(exitButton);	// adds exit button
+
+		atmButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				doCustomerLogin();
+				mode = "ATM";	// locks program into ATM mode
+				createLoginWindow();
 			}
 		});
 
-		employeeLoginButton.addActionListener(new ActionListener() {
+		employeeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				doEmployeeLogin();
+				mode = "EMPLOYEE";	// locks program into Teller mode
+				createLoginWindow();
 			}
 		});
-
 
 		exitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -63,11 +72,52 @@ public class BankGUI implements BankUserInterface {
 				System.exit(0);
 			}
 		});
-		
+
 		frame.setContentPane(mainPanel);
 		frame.setVisible(true);
+	}
 
+	private void createLoginWindow() {
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new GridLayout(0, 1));
 
+		JLabel label = new JLabel(mode + " Mode", SwingConstants.CENTER);	// show which mode the program is locked into
+		JButton exitButton = new JButton("Exit");	// exit without switching modes
+		mainPanel.add(label);
+
+		
+		if (mode.equals("ATM")) {	// ATM mode only gets customer login
+			JButton customerLoginButton = new JButton("Customer Login");
+			mainPanel.add(customerLoginButton);
+
+			customerLoginButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					doCustomerLogin();
+				}
+			});
+			
+		} else if (mode.equals("EMPLOYEE")) {	// EMPLOYEE mode only gets employee login
+			JButton employeeLoginButton = new JButton("Employee Login");
+			mainPanel.add(employeeLoginButton);
+
+			employeeLoginButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					doEmployeeLogin();
+				}
+			});
+		}
+
+		mainPanel.add(exitButton);	// add exit button after the correct login button
+
+		exitButton.addActionListener(new ActionListener() {	// exit without returning to mode selection
+			public void actionPerformed(ActionEvent e) {
+				client.close();
+				System.exit(0);
+			}
+		});
+
+		frame.setContentPane(mainPanel);
+		frame.setVisible(true);
 	}
 
 	private void doCustomerLogin() {
@@ -190,8 +240,6 @@ public class BankGUI implements BankUserInterface {
 		String pin = pinField.getText();
 		String secQ = secQField.getText();
 		String secA = secAField.getText();
-
-		// NOT FINISHED
 	}
 	
 	
@@ -199,7 +247,7 @@ public class BankGUI implements BankUserInterface {
 	
 	private void openCustomerWindow() {
 		JFrame customerFrame = new JFrame();
-		customerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		customerFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);	
 		customerFrame.setSize(550, 850);
 		customerFrame.setLocationRelativeTo(null);
 		JPanel customerPanel = new JPanel();				// create one panel to hold all the buttons
@@ -210,12 +258,16 @@ public class BankGUI implements BankUserInterface {
 		JButton depositButton = new JButton("Deposit");
 		JButton withdrawButton = new JButton("Withdraw");
 		JButton transferButton = new JButton("Transfer");
+		JButton viewAccountsButton = new JButton("View Accounts");
+		JButton freezeButton = new JButton("Freeze Account");			// customers can freeze accounts, only employees can thaw
 		JButton logoutButton = new JButton("Logout");
 		
 		// add the buttons to the panel
+		customerPanel.add(viewAccountsButton);
 		customerPanel.add(depositButton);
 		customerPanel.add(withdrawButton);
 		customerPanel.add(transferButton);
+		customerPanel.add(freezeButton);
 		customerPanel.add(logoutButton);
 
 		// connect buttons to methods
@@ -236,6 +288,18 @@ public class BankGUI implements BankUserInterface {
 				doTransfer();
 			}
 		});
+		
+		viewAccountsButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				doViewAccounts();
+			}
+		});
+		
+		freezeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				doFreezeAccount();
+			}
+		});
 
 		logoutButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -251,6 +315,10 @@ public class BankGUI implements BankUserInterface {
 				
 				customerFrame.dispose();
 				currCust = null;			//reset whoever was currently logged in
+				client.close();
+				client = new Client();
+				client.connect("localhost", 1234);
+				
 				createWindow();				// go back to log in screen
 			}
 		});
@@ -263,7 +331,7 @@ public class BankGUI implements BankUserInterface {
 	
 	private void openEmployeeWindow() {
 		JFrame employeeFrame = new JFrame();
-		employeeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		employeeFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		employeeFrame.setSize(550, 850);
 		employeeFrame.setLocationRelativeTo(null);
 		JPanel employeePanel = new JPanel();				// create one panel to hold all the buttons
@@ -307,6 +375,10 @@ public class BankGUI implements BankUserInterface {
 				
 				employeeFrame.dispose();
 				currEmp = null;			//reset whoever was currently logged in
+				client.close();
+				client = new Client();
+				client.connect("localhost", 1234);
+				
 				createWindow();				// go back to log in screen
 			}
 		});
@@ -363,6 +435,7 @@ public class BankGUI implements BankUserInterface {
 			
 		}
 	}
+	
 	private void doWithdraw() {
 		JPanel panel = new JPanel(new GridLayout(2, 2));
 		
@@ -428,8 +501,8 @@ public class BankGUI implements BankUserInterface {
 			return;
 		}
 
-		String fromText = toField.getText();
-		String toText = fromField.getText();
+		String fromText = fromField.getText();
+		String toText = toField.getText();
 		String amountText = amountField.getText();
 		
 		try {
@@ -440,6 +513,7 @@ public class BankGUI implements BankUserInterface {
 			
 			if (fromID == toID) {
 				JOptionPane.showMessageDialog(null, "ERROR: Choose two different accounts");
+				return;
 			}
 			
 			// find the matching account 
@@ -465,7 +539,7 @@ public class BankGUI implements BankUserInterface {
 		}
 	}
 
-
+	
 	private void doFindCustomer() {
 		JPanel panel = new JPanel(new GridLayout(3, 2));
 
@@ -516,6 +590,62 @@ public class BankGUI implements BankUserInterface {
 		}
 	}
 	
+	private void doViewAccounts() {
+
+		if (currCust == null) {
+			JOptionPane.showMessageDialog(null, "No customer is currently selected.");
+			return;
+		}
+
+		String info = "Accounts for " + currCust.getCustName() + "\n";
+
+		Account[] accounts = currCust.getAccounts();
+
+		for (int i = 0; i < currCust.getNumAccounts(); i++) {
+			Account account = accounts[i];
+
+			info += "Type: " + account.getAccType() + "\n";
+			info += "Account ID: " + account.getAccountID() + "\n";
+			info += "Balance: $" + account.getBalance() + "\n\n";
+		}
+
+		if (currCust.getNumAccounts() == 0) {
+			info += "No accounts found.";
+		}
+
+		JOptionPane.showMessageDialog(null, info);
+	}
+
+	
+	private void doFreezeAccount() {
+		if (currCust == null) {
+			JOptionPane.showMessageDialog(null, "No customer is currently selected.");
+			return;
+		}
+
+		String input = JOptionPane.showInputDialog(null, "Enter Account ID to freeze:");
+
+		if (input == null) {
+			return;
+		}
+
+		try {
+			int accountID = Integer.parseInt(input.trim());
+			Account account = currCust.getAccountByID(accountID);
+
+			if (account == null) {
+				JOptionPane.showMessageDialog(null, "Account not found.");
+				return;
+			}
+
+			account.freeze();
+			JOptionPane.showMessageDialog(null, "Account frozen successfully.");
+		} catch (NumberFormatException ex) {
+			JOptionPane.showMessageDialog(null, "Please enter a valid account ID.");
+		}
+	}
+	
+	
 	private void openEmployeeControlWindow() {
 		// create a new window for the employee working on a customer
 		JFrame employeeControlFrame = new JFrame("Employee Control Window");
@@ -529,10 +659,16 @@ public class BankGUI implements BankUserInterface {
 		JButton depositButton = new JButton("Deposit");
 		JButton withdrawButton = new JButton("Withdraw");
 		JButton transferButton = new JButton("Transfer");
+		JButton viewAccountsButton = new JButton("View Customer's Accounts");
+		JButton createAccountButton = new JButton("Create New Account");
+		JButton deleteAccountButton = new JButton("Delete Existing Account");
 		JButton freezeButton = new JButton("Freeze Account");
 		JButton thawButton = new JButton("Thaw Account");
 		JButton backButton = new JButton("Back");
 
+		employeeControlPanel.add(viewAccountsButton);
+		employeeControlPanel.add(createAccountButton);
+		employeeControlPanel.add(deleteAccountButton);
 		employeeControlPanel.add(depositButton);
 		employeeControlPanel.add(withdrawButton);
 		employeeControlPanel.add(transferButton);
@@ -540,6 +676,18 @@ public class BankGUI implements BankUserInterface {
 		employeeControlPanel.add(thawButton);
 		employeeControlPanel.add(backButton);
 
+		createAccountButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				doCreateAccount();
+			}
+		});
+		
+		deleteAccountButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				doDeleteAccount();
+			}
+		});
+		
 		depositButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				doDeposit();
@@ -555,6 +703,12 @@ public class BankGUI implements BankUserInterface {
 		transferButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				doTransfer();
+			}
+		});
+		
+		viewAccountsButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				doViewAccounts();
 			}
 		});
 
@@ -639,8 +793,74 @@ public class BankGUI implements BankUserInterface {
 		employeeControlFrame.setVisible(true);
 	}
 	
+	private void doCreateAccount() {
+		if (currCust == null) {
+			JOptionPane.showMessageDialog(null, "No customer is currently selected.");
+			return;
+		}
+
+		accountType[] accountTypes = {accountType.CHECKINGS, accountType.SAVINGS, accountType.CREDIT};
+
+		accountType typeChoice = (accountType) JOptionPane.showInputDialog(null, "Choose account type:", "Create Account", 
+				JOptionPane.QUESTION_MESSAGE, null, accountTypes, accountTypes[0]);
+
+		if (typeChoice == null) {
+			return;
+		}
+
+		double startingDeposit = 0;
+
+		if (typeChoice != accountType.CREDIT) { // credit accounts dont need a starting deposit
+			String depositText = JOptionPane.showInputDialog(null, "Enter starting deposit:");
+
+			if (depositText == null) {
+				return;
+			}
+
+			try {
+				startingDeposit = Double.parseDouble(depositText);
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(null, "Please enter a valid deposit amount.");
+				return;
+			}
+		}
+
+		currCust.addAccount(typeChoice, startingDeposit);
+		JOptionPane.showMessageDialog(null, "Account created successfully.");
+	}
 	
-	// using to test gui, not needed if we make a main driver.
+	
+	private void doDeleteAccount() {
+		if (currCust == null) {
+			JOptionPane.showMessageDialog(null, "No customer is currently selected.");
+			return;
+		}
+
+		String input = JOptionPane.showInputDialog(null, "Enter Account ID to delete:");
+
+		if (input == null) {
+			return;
+		}
+
+		try {
+			int accountID = Integer.parseInt(input);
+
+			Account account = currCust.getAccountByID(accountID);
+
+			if (account == null) {
+				JOptionPane.showMessageDialog(null, "Account not found.");
+				return;
+			}
+
+			currCust.removeAccount(accountID);
+			JOptionPane.showMessageDialog(null, "Account deleted successfully.");
+
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null, "Please enter a valid account ID.");
+		}
+	}
+	
+	
 	public static void main(String[] args) {
 		BankGUI gui = new BankGUI();
 		gui.processCommands();
