@@ -20,7 +20,7 @@ public class Server {
 		try {
 			Path path = Paths.get("CustomerList.txt");
 			String output = Files.readString(path);
-			lines = output.split("\n");
+			lines = output.split("\\R");
 
 			numCustomers = lines.length - 3;
 			lines[0] = "NumberOfCustomers " + numCustomers;
@@ -34,7 +34,7 @@ public class Server {
 				}
 			}
 			Files.write(path, Arrays.asList(lines));
-		} catch (IOException e) {
+		} catch (IOException e) { 
 			e.printStackTrace();
 		}
 		return ListOCustomers;
@@ -48,7 +48,7 @@ public class Server {
 		try {
 			Path path = Paths.get("EmployeeList.txt");
 			String output = Files.readString(path);
-			lines = output.split("\n");
+			lines = output.split("\\R");
 
 			numEmployees = lines.length - 3;
 			lines[0] = "NumberOfEmployees " + numEmployees;
@@ -125,7 +125,7 @@ public class Server {
 		String[] temp = null;
 		try { // transfer the text from the file to a string to an array. 
 			String output = Files.readString(Paths.get(ID+".txt"));
-			lines = output.split("\n"); 
+			lines = output.split("\\R"); 
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
@@ -171,7 +171,7 @@ public class Server {
 			Path path = Paths.get(file);
 
 			String output = Files.readString(path);
-			String[] lines = output.split("\n");
+			String[] lines = output.split("\\R");
 
 			//Searches for the matching user ID and updates their login status
 			for (int i = 3; i < lines.length; i++) {
@@ -196,7 +196,7 @@ public class Server {
 			Path path = Paths.get("CustomerList.txt");
 
 			String output = Files.readString(path);
-			String[] lines = output.split("\n");
+			String[] lines = output.split("\\R");
 
 			//Finds the customer by ID and replaces their stored data with updated values
 			for (int i = 3; i < lines.length; i++) {
@@ -277,7 +277,7 @@ public class Server {
 			Path path = Paths.get("CustomerList.txt");
 
 			String output = Files.readString(path);
-			String[] lines1 = output.split("\n");
+			String[] lines1 = output.split("\\R");
 			String[] lines2 = new String[lines1.length-1];
 			int removalIndex = 0;
 
@@ -334,7 +334,7 @@ public class Server {
 			Path path = Paths.get(file);
 
 			String output = Files.readString(path);
-			String[] lines = output.split("\n");
+			String[] lines = output.split("\\R");
 			
 			String[] chunks = lines[lines.length-1].split(",");
 			
@@ -352,14 +352,14 @@ public class Server {
 		try {
 			Path path = Paths.get("CustomerList.txt");
 			String output = Files.readString(path);
-			String[] lines = output.split("\n");
+			String[] lines = output.split("\\R");
 			String[] chunks = lines[lines.length-1].split(",");
 			
 			int highestCustID =Integer.parseInt(chunks[0]);
 			
 			path = Paths.get("EmployeeList.txt");
 			output = Files.readString(path);
-			lines = output.split("\n");
+			lines = output.split("\\R");
 			chunks = lines[lines.length-1].split(",");
 
 			int highestEmplID =Integer.parseInt(chunks[0]);
@@ -687,6 +687,9 @@ public class Server {
 						objectOutputStream.flush();
 					}
 				}
+			}
+			catch (EOFException e) {
+			    System.out.println("Client disconnected.");
 			}
 			catch (IOException e) {
 				e.printStackTrace();

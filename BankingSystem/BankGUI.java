@@ -329,7 +329,7 @@ public class BankGUI implements BankUserInterface {
 
 		panel.add(new JLabel("Account ID: "));
 		panel.add(idField);
-		panel.add(new JLabel("Ammount: "));
+		panel.add(new JLabel("Amount: "));
 		panel.add(amountField);
 
 		int result = JOptionPane.showConfirmDialog(null, panel, "Deposit", JOptionPane.OK_CANCEL_OPTION);
@@ -371,7 +371,7 @@ public class BankGUI implements BankUserInterface {
 
 		panel.add(new JLabel("Account ID: "));
 		panel.add(idField);
-		panel.add(new JLabel("Ammount: "));
+		panel.add(new JLabel("Amount: "));
 		panel.add(amountField);
 
 		int result = JOptionPane.showConfirmDialog(null, panel, "Withdraw", JOptionPane.OK_CANCEL_OPTION);
@@ -418,7 +418,7 @@ public class BankGUI implements BankUserInterface {
 		panel.add(fromField);
 		panel.add(new JLabel("to Account ID: "));	
 		panel.add(toField);
-		panel.add(new JLabel("Ammount: "));
+		panel.add(new JLabel("Amount: "));
 		panel.add(amountField);
 
 		int result = JOptionPane.showConfirmDialog(null, panel, "Transfer", JOptionPane.OK_CANCEL_OPTION);
