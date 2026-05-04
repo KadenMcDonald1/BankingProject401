@@ -6,6 +6,8 @@ public class Customer extends User{
 	private String securityA;
 	private String customerName;
 	private int numAccounts;
+	private int accountIDDupeCounter; // This variable is here to prevent duplicate IDs for accounts that are
+									  // being created after an account was removed out of order.
 	
 	public Customer(String pin, String secQ, String secA, String name) {//for new customers.
 		super(pin);
@@ -14,6 +16,7 @@ public class Customer extends User{
 		customerName = name;
 		numAccounts = 0;
 		accounts = new Account[5];
+		accountIDDupeCounter = 0;
 	}
 	public Customer(int ID, String pin, String secQ, String secA, String name) {//for customers that exist in the files.
 		super(ID, pin);
@@ -22,6 +25,7 @@ public class Customer extends User{
 		customerName = name;
 		numAccounts = 0;
 		accounts = new Account[5];
+		accountIDDupeCounter = 0;
 	}
 	
 	public Account[] getAccounts() {
@@ -60,8 +64,11 @@ public class Customer extends User{
 	public String getCustName() {
 		return customerName;
 	}
+	public int getAccountIDDupeCounter() {
+		return accountIDDupeCounter;
+	}
 	
-	public void addAccount(accountType type, double startingDeposit) { 
+	public void addAccount(accountType type, double startingDeposit, int currAccID) { 
 		if (numAccounts == accounts.length){ // if array has no spots open, the array size will be doubled
 			Account[] temp = accounts;
 			accounts = new Account[(temp.length)*2];
@@ -70,18 +77,19 @@ public class Customer extends User{
 			}
 		}
 		if (type == accountType.CHECKINGS) {
-			accounts[numAccounts] = new CheckingsAccount(startingDeposit);
+			accounts[numAccounts] = new CheckingsAccount(startingDeposit, currAccID);
 		}
 		else if (type == accountType.SAVINGS) {
-			accounts[numAccounts] = new SavingsAccount(startingDeposit);
+			accounts[numAccounts] = new SavingsAccount(startingDeposit, currAccID);
 		}
 		else if (type == accountType.CREDIT) {
-			accounts[numAccounts] = new CreditAccount();
+			accounts[numAccounts] = new CreditAccount(currAccID);
 		}
 		else {
 			return;
 		}
 		numAccounts++;
+		accountIDDupeCounter++;
 	}
 	
 	public void removeAccount(int accountID) {
@@ -154,5 +162,9 @@ public class Customer extends User{
 			return true;
 		}
 		return false;
+	}
+	
+	public void recalibrateAccountIDs(){
+		
 	}
 }

@@ -9,8 +9,8 @@ public class CheckingsAccount extends Account{
 	private String prevWithdrawalDate;
 	private double amountWSF; // amountWSF = amount withdrawaled so far.
 	
-	public CheckingsAccount(double startingDeposit) { 
-		super(accountType.CHECKINGS, startingDeposit);
+	public CheckingsAccount(double startingDeposit, int currAccID) { 
+		super(accountType.CHECKINGS, startingDeposit, currAccID);
 		dailyWithdrawalLimit = 1000;
 		prevWithdrawalDate = getFormatedDate();
 		amountWSF = 0;
