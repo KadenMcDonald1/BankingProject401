@@ -2,6 +2,6 @@ NumberOfCustomers 4
 format: userID,pin,isLoggedIn,customerName,securityQ,securityA,numAccoutns
 
 1,password,false,John Doe,Mothers maiden name?,JANE,3
-2,goodPassword,false,Sarah Connor,Favorite pets name?,WOLFIE,4
+2,goodPassword,true,Sarah Connor,Favorite pets name?,WOLFIE,4
 4,password123,false,Joseph Joe,Favorite word?,HERMIT,2
 5,passwordABC,false,Jack Daniel,Favorite pets name?,MAX,3

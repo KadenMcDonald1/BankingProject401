@@ -28,7 +28,7 @@ public class Employee extends User {
 	}
 	
 	public void openAccountForCurCust(accountType type, double startingDeposit) {
-		curCust.addAccount(type, startingDeposit);
+		curCust.addAccount(type, startingDeposit, curCust.getAccountIDDupeCounter()-1);
 	}
 	
 	public void removeAccountForCurCust(int accountID) {
