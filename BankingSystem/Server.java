@@ -92,8 +92,10 @@ public class Server {
 		for (int i = 0; i < num; i++) {
 			if (ID.equals(list[i][0])) {
 				if (pin.equals(list[i][1])) {
-					String[] currUserInfo = list[i];
-					return currUserInfo;
+					if ("false".equals(list[i][2])) {
+						String[] currUserInfo = list[i];
+						return currUserInfo;
+					}
 				}
 			}
 		}
@@ -108,10 +110,13 @@ public class Server {
 		for (int i = 0; i < num; i++) {
 			if (ID.equals(list[i][0])) {
 				if (pin.equals(list[i][1])) {
-					if (securityA.equals(list[i][5])) {
-						String[] currUserInfo = list[i];
-						return currUserInfo;
+					if ("false".equals(list[i][2])) {
+						if (securityA.equals(list[i][5])) {
+							String[] currUserInfo = list[i];
+							return currUserInfo;
+						}
 					}
+					
 				}
 			}
 		}
