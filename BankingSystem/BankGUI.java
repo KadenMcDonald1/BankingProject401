@@ -825,7 +825,7 @@ public class BankGUI implements BankUserInterface {
 			}
 		}
 
-		currCust.addAccount(typeChoice, startingDeposit);
+		currCust.addAccount(typeChoice, startingDeposit, currCust.getAccountIDDupeCounter());
 		JOptionPane.showMessageDialog(null, "Account created successfully.");
 	}
 	
