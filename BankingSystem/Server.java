@@ -15,57 +15,91 @@ public class Server {
 	private static int totalUserNum = 0;
 	
 	public static String[][] LoadCustomers(){
-		String[] lines = null;
 		String[][] ListOCustomers = null;
 		try {
 			Path path = Paths.get("CustomerList.txt");
 			String output = Files.readString(path);
-			lines = output.split("\\R");
+			String[] lines = output.split("\\R");
 
-			numCustomers = lines.length - 3;
-			lines[0] = "NumberOfCustomers " + numCustomers;
+			numCustomers = 0;
+			
+			
+	        for (int i = 3; i < lines.length; i++) {
+	            if (!lines[i].trim().isEmpty()) {
+	                numCustomers++;
+	            }
+	        }
 
-			ListOCustomers = new String[numCustomers][7];
+	        lines[0] = "NumberOfCustomers " + numCustomers;
 
-			for (int i = 3; i < lines.length; i++) {
-				String[] temp = lines[i].split(",");
-				for (int j = 0; j < 7; j++) { // need to test the 7 and 3's positions here...
-					ListOCustomers[i-3][j] = temp[j];
-				}
-			}
-			Files.write(path, Arrays.asList(lines));
-		} catch (IOException e) { 
-			e.printStackTrace();
-		}
-		return ListOCustomers;
+	        ListOCustomers = new String[numCustomers][7];
+
+	        int customerIndex = 0;
+
+	        for (int i = 3; i < lines.length; i++) {
+	            if (!lines[i].trim().isEmpty()) {
+	                String[] temp = lines[i].split(",");
+
+	                for (int j = 0; j < 7; j++) {
+	                    ListOCustomers[customerIndex][j] = temp[j];
+	                }
+
+	                customerIndex++;
+	            }
+	        }
+
+	        Files.write(path, Arrays.asList(lines));
+
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+
+	    return ListOCustomers;
 	}
 	// Will need to call these 2 ^v methods multiple times through the running process to double check
 	// who is currently logged in and logged out at that time. (it will most likely need to be 
 	// done when login requests are received and transfer requests are received)
 	public static String[][] LoadEmployees() {
-		String[] lines = null;
-		String[][] ListOEmployees = null;
-		try {
-			Path path = Paths.get("EmployeeList.txt");
-			String output = Files.readString(path);
-			lines = output.split("\\R");
+	    String[][] ListOEmployees = null;
 
-			numEmployees = lines.length - 3;
-			lines[0] = "NumberOfEmployees " + numEmployees;
+	    try {
+	        Path path = Paths.get("EmployeeList.txt");
+	        String output = Files.readString(path);
+	        String[] lines = output.split("\\R");
 
-			ListOEmployees = new String[numEmployees][3];
+	        numEmployees = 0;
 
-			for (int i = 3; i < lines.length; i++) {
-				String[] temp = lines[i].split(",");
-				for (int j = 0; j < 3; j++) {
-					ListOEmployees[i-3][j] = temp[j];
-				}
-			}
-			Files.write(path, Arrays.asList(lines));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return ListOEmployees;
+	        for (int i = 3; i < lines.length; i++) {
+	            if (!lines[i].trim().isEmpty()) {
+	                numEmployees++;
+	            }
+	        }
+
+	        lines[0] = "NumberOfEmployees " + numEmployees;
+
+	        ListOEmployees = new String[numEmployees][3];
+
+	        int employeeIndex = 0;
+
+	        for (int i = 3; i < lines.length; i++) {
+	            if (!lines[i].trim().isEmpty()) {
+	                String[] temp = lines[i].split(",");
+
+	                for (int j = 0; j < 3; j++) {
+	                    ListOEmployees[employeeIndex][j] = temp[j];
+	                }
+
+	                employeeIndex++;
+	            }
+	        }
+
+	        Files.write(path, Arrays.asList(lines));
+
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+
+	    return ListOEmployees;
 	}
 	
 	public static int CalcTotalUsers() { // Need to figure out what im doing with this.....
@@ -235,11 +269,11 @@ public class Server {
 			Path path = Paths.get("CustomerList.txt");
 			
 			//Formats the new customer data into a line matching the file structure
-			String newCustLine = "\n"+customer.getUserID()+","+customer.getPin().trim()+","+customer.getIsLoggedIn()+
+			String newCustLine = customer.getUserID()+","+customer.getPin().trim()+","+customer.getIsLoggedIn()+
 									","+customer.getCustName().trim()+","+customer.getSecurityQ().trim()+","+
 									customer.getSecurityA().trim()+","+customer.getNumAccounts();
 				
-			Files.writeString(path, newCustLine, StandardOpenOption.APPEND);
+			Files.writeString(path, System.lineSeparator() + newCustLine, StandardOpenOption.APPEND);
 			
 			LoadCustomers();
 			CalcTotalUsers();
@@ -358,36 +392,36 @@ public class Server {
 	}
 	
 	public static int getCurrUserIDCounterPos() {
-		try {
-			Path path = Paths.get("CustomerList.txt");
-			String output = Files.readString(path);
-			String[] lines = output.split("\\R");
-			String[] chunks = lines[lines.length-1].split(",");
-			
-			int highestCustID =Integer.parseInt(chunks[0]);
-			
-			path = Paths.get("EmployeeList.txt");
-			output = Files.readString(path);
-			lines = output.split("\\R");
-			chunks = lines[lines.length-1].split(",");
+	    int highestID = 0;
 
-			int highestEmplID =Integer.parseInt(chunks[0]);
-			
-			if (highestCustID>highestEmplID) {
-				return highestCustID++;
-			}
-			else if (highestEmplID>highestCustID) {
-				return highestEmplID++;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return 0; //if zero is returned there was an error.
+	    try {
+	        String[] customerLines = Files.readString(Paths.get("CustomerList.txt")).split("\\R");
+
+	        for (int i = 3; i < customerLines.length; i++) {
+	            if (!customerLines[i].trim().isEmpty()) {
+	                String[] chunks = customerLines[i].split(",");
+	                highestID = Math.max(highestID, Integer.parseInt(chunks[0].trim()));
+	            }
+	        }
+
+	        String[] employeeLines = Files.readString(Paths.get("EmployeeList.txt")).split("\\R");
+
+	        for (int i = 3; i < employeeLines.length; i++) {
+	            if (!employeeLines[i].trim().isEmpty()) {
+	                String[] chunks = employeeLines[i].split(",");
+	                highestID = Math.max(highestID, Integer.parseInt(chunks[0].trim()));
+	            }
+	        }
+
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+
+	    return highestID + 1;
 	}
 	
 	
-	
-	
+
 	
 	
 	
@@ -650,13 +684,16 @@ public class Server {
 									// then append the customer onto the CustomerList.txt.
 									
 									// After that then call a method to change the customers ID in file to the highestIDVal+1.
+								    Customer newCust = msg.getCurrCust();
+
+								    int newID = getCurrUserIDCounterPos();
+								    newCust.setUserID(newID);
 									
-									PushAccountInfo(msg.getCurrCust());
-									PushNewCustomer(msg.getCurrCust());
-									setNewUserIDNum(getCurrUserIDCounterPos()+"","CustomerList.txt");
+									PushAccountInfo(newCust);
+									PushNewCustomer(newCust);
 									
 									response = new Message(userType.CUSTOMER,userStatus.UNDEFINED,commandType.CREATE_CUSTOMER,commandStatus.SUCCESS,
-											null,currEmplObj,null,"Cusotmer Sucsessfully Created, Returning to Login Screen\n");
+											null, currEmplObj, null, "Customer Successfully Created. New ID: " + newID + "\n");
 									
 									objectOutputStream.writeObject(response);
 									objectOutputStream.flush();

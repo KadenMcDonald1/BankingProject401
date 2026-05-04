@@ -236,10 +236,34 @@ public class BankGUI implements BankUserInterface {
 		}
 
 		// get the name, pin, and security info
-		String name = nameField.getText();
-		String pin = pinField.getText();
-		String secQ = secQField.getText();
-		String secA = secAField.getText();
+		String name = nameField.getText().trim();
+		String pin = pinField.getText().trim();
+		String secQ = secQField.getText().trim();
+		String secA = secAField.getText().trim();
+		
+		if (name.isEmpty() || pin.isEmpty() || secQ.isEmpty() || secA.isEmpty()) {
+		    JOptionPane.showMessageDialog(frame, "Please fill out all fields.");
+		    return;
+		}
+
+		if (name.contains(",") || pin.contains(",") || secQ.contains(",") || secA.contains(",")) {
+		    JOptionPane.showMessageDialog(frame, "Fields cannot contain commas.");
+		    return;
+		}
+		
+	    Customer newCust = new Customer(0, pin, secQ, secA, name);
+
+	    Message createMsg = new Message(userType.EMPLOYEE, userStatus.LOGGED_IN, commandType.CREATE_CUSTOMER, commandStatus.UNDEFINED,
+	            newCust, currEmp, currEmp.getUserID() + "", "");
+
+	    Message response = client.sendMessage(createMsg);
+
+	    if (response == null) {
+	        JOptionPane.showMessageDialog(frame, "Error creating customer.");
+	        return;
+	    }
+
+	    JOptionPane.showMessageDialog(frame, response.getText());
 	}
 	
 	

@@ -1,4 +1,4 @@
-NumberOfCustomers 4
+NumberOfCustomers 7
 format: userID,pin,isLoggedIn,customerName,securityQ,securityA,numAccoutns
 
 1,password,false,John Doe,Mothers maiden name?,JANE,3
