@@ -1,0 +1,2 @@
+NumberOfAccounts 0
+format: AccountID,accountType,isFrozen,balance,withdrawalLimit/creditLimit,interestRate

@@ -40,6 +40,9 @@ public class Customer extends User{
 		}
 		return null;
 	}
+	public void setUserID(int userID) {
+	    this.userID = userID;
+	}
 	public void freezeAccount(int i){
 		accounts[i].freeze();
 	}
